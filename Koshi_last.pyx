@@ -59,7 +59,7 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double[:, :] coefs)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def define_stability(double[:] xi1_args, double[:] xi2_args, double[:, :] A_, double[:, :] B_, double[:, :] D_, double[:, :] coefs):
+def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, double[:, :] coefs, double[:] xi1_args, double[:] xi2_args):
 
     cdef np.ndarray[np.float64_t, ndim=2] I, Monodromy, StMatr
     cdef np.ndarray[np.float64_t, ndim=1] TT

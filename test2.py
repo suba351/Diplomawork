@@ -1,20 +1,19 @@
 import sys
 import Koshi_last
 print(sys.path)
-sys.path.append('C:\\Users\\kirik\\AppData\\Local\\Programs\\Python\\Python37\\lib\\site-packages')
 import matplotlib.pyplot as plt
 from functools import partial
 from concurrent.futures import as_completed, ProcessPoolExecutor
 import numpy as np
 import time
-A = np.load(r"F:\NIR_4th_semestr\TEST\A_Matrix.npy", allow_pickle=True)
-B = np.load(r"F:\NIR_4th_semestr\TEST\B_Matrix.npy", allow_pickle=True)
-D = np.load(r"F:\NIR_4th_semestr\TEST\D_Matrix.npy", allow_pickle=True)
+A = np.load(r"/home/hello/PycharmProjects/NIR_/A_Matrix.npy", allow_pickle=True)
+B = np.load(r"/home/hello/PycharmProjects/NIR_/B_Matrix.npy", allow_pickle=True)
+D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 coeffs = [[119.70647156248701, 0.0010825618631403865, 0.0], [287.50279265854937, 0.02814203176239039, 0.0], [3128.8357316400056, 0.9999999994866093, 0.0]]
 coeffs = np.array(coeffs)
 
-mx, Mx, nPtx = 0, 1.0, 60
-my, My, nPty = 0, 0.5, 60
+mx, Mx, nPtx = 0, 1.0, 80
+my, My, nPty = 0, 0.5, 80
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 
@@ -46,9 +45,9 @@ def plot_dots(Matrix):
     plt.show()
 
 
-def define_stability_async(xi1_args, xi2_args, A, B, D, coeffs, *, n_jobs):
+def define_stability_async(A, B, D, coeffs, *, n_jobs):
     executor = ProcessPoolExecutor(max_workers=n_jobs)
-    spawn = partial(executor.submit, Koshi_last.define_stability, xi1_args, xi2_args, A, B, D, coeffs)
+    spawn = partial(executor.submit, Koshi_last.define_stability, A, B, D, coeffs)
     step = (Mx - mx) / n_jobs
     fs = [spawn(np.linspace(mx + i*step, mx + (i+1)*step, nPtx // n_jobs),
                 np.linspace(my, My, nPty))
