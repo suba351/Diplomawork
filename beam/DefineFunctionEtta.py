@@ -1,21 +1,15 @@
 from sympy import symbols, Matrix
-from sympy import Symbol, re, sqrt, sin, cos
+from sympy import Symbol, re, sqrt
 from sympy.solvers import solve
-from Plate.SubsValues import subs_values
-t = Symbol('t')
-p = Symbol('p')
-xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
-M, C, b_a = subs_values()
-
-
 import numpy as np
 import os
-os.chdir(r'F:\NIR_4th_semestr')
+os.chdir(r'/home/hello/PycharmProjects/NIR_')
 from Plate.SubsValues import subs_values
 t = Symbol('t')
 p = Symbol('p')
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
 M, C, b_a = subs_values()
+
 
 def etta(xi_1, xi_2, z0=Matrix([1, 0, 0]), dz0=Matrix([0, 0, 0])):
     '''
@@ -46,4 +40,3 @@ def etta(xi_1, xi_2, z0=Matrix([1, 0, 0]), dz0=Matrix([0, 0, 0])):
 # разбиваем пластину сеткой (точки контакта)
 mesh1 = np.linspace(0.0, 1.0, 41)
 mesh2 = np.linspace(0., b_a, 41)
-
