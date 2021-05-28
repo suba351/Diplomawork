@@ -6,7 +6,7 @@ from Plate.CalcCoeff import a_coeff, integrate_coeff
 def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     kappa0, kappa1, kappa2, kappa3, kappa4 = symbols('kappa0 kappa1 kappa2 kappa3 kappa4', real=True)
     xi1, xi2, xi1__, xi2__ = symbols('xi1 xi2 xi1__ xi2__', real=True)
-
+    k0 = symbols('k0', real=True)
     # Коэффициенты при обобщённых координатах в выражении потенциальной энергии при сжатии пружины:
     u11_spring = (fi1.subs(xi1, 1) * psi1.subs(xi2, 0.5 * b_a)) ** 2 * kappa3
     u22_spring = (fi2.subs(xi1, 1) * psi2.subs(xi2, 0.5 * b_a)) ** 2 * kappa3
@@ -47,5 +47,8 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
         [-kappa4 * u2, c21, c22]
     ])
 
+    F = np.array([-kappa2 * k0, kappa4*u1*k0, kappa4*u2*k0])
+
     np.save('M_Matrix', M)
     np.save('C_Matrix', C)
+    np.save('F_vector', F)

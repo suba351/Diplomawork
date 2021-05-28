@@ -1,7 +1,7 @@
 from sympy import symbols
 import os
 
-os.chdir(r'F:\NIR_4th_semestr')
+os.chdir(r'/home/hello/PycharmProjects/NIR_')
 # Запись физических параметров материалов из файла data.txt
 
 
