@@ -26,8 +26,8 @@ def plot_dots(Matrix):
     plt.xlim(mx-step_x, Mx+step_x)
     plt.ylim(my-step_y, My+step_y)
     plt.grid(True)
-    plt.xlabel('P[1]', fontsize=12)
-    plt.ylabel('P[2]', fontsize=12)
+    plt.xlabel('xi_1', fontsize=12)
+    plt.ylabel('xi_2', fontsize=12)
     plt.title('graph', fontsize=12)
     for x in range(nPtx):
         for y in range(nPty):
