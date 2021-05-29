@@ -12,8 +12,8 @@ D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 # coeffs = [[119.70647156248701, 0.0010825618631403865, 0.0], [287.50279265854937, 0.02814203176239039, 0.0], [3128.8357316400056, 0.9999999994866093, 0.0]]
 # coeffs = np.array(coeffs)
 
-mx, Mx, nPtx = 0, 1.0, 80
-my, My, nPty = 0, 0.5, 80
+mx, Mx, nPtx = 0, 1.0, 32
+my, My, nPty = 0, 0.5, 32
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 
@@ -23,8 +23,6 @@ xi1_args, xi2_args = np.linspace(mx + step_x, Mx - step_x, nPtx), np.linspace(my
 def plot_dots(Matrix):
     x_space = np.linspace(mx, Mx, nPtx)
     y_space = np.linspace(my, My, nPty)
-    step_x = (mx - Mx) / nPtx * 2
-    step_y = (my - My) / nPty * 2
     plt.figure('graph')
     plt.xlim(mx-step_x, Mx+step_x)
     plt.ylim(my-step_y, My+step_y)
