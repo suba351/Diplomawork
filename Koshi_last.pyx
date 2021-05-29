@@ -3,8 +3,7 @@ cimport cython
 import numpy as np
 cimport numpy as np
 from libc.math cimport pi, cos, sin
-from sympy import symbols, Matrix
-from sympy import Symbol, re, sqrt
+from sympy import symbols, Matrix, Symbol, re, sqrt
 from sympy.solvers import solve
 from sympy.utilities.autowrap import autowrap
 import os
@@ -74,7 +73,7 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
     B = B_
     D = D_
     def Matrix_curr(double t):
-        return np.array([
+        return np.ndarray([
                 [0, 0, 1, 0],
                 [0, 0, 0, 1],
                 [-(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[0][0] / A[0][0], 0, 0, -2 * mu * B[0][1] / A[0][0]],
@@ -86,10 +85,10 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, mu, double[:] xi1_args, double[:] xi2_args):
-    cdef Py_ssize_t i, j, k
+def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, double[:] mu, double[:] xi1_args, double[:] xi2_args):
+    cdef Py_ssize_t i, j, m
     cdef long val
-    cdef np.ndarray[np.float64_t, ndim=2] I, Monodromy, StMatr
+    cdef np.ndarray[np.float64_t, ndim=2] I, Monodromy, StMatr, A, B
     cdef double rho_max, T, h2, Eps_multipliers, t
     cdef int N
     Eps_multipliers = 0.0001
@@ -98,18 +97,19 @@ def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, m
     StMatr = np.zeros((xi1_args.shape[0], xi2_args.shape[0]))
     for i in range(xi1_args.shape[0]):
         for j in range(xi2_args.shape[0]):
-            A_matr, T = Koshi(A_, B_, D_, coefs, mu, xi1_args[i], xi2_args[j])
-            h2 = T / N / 2
-            A = A_matr(0.0) * h2
-            Monodromy = I
-            t = 0
-            for k in range(N + 1):
-                t += h2
-                B = A_matr(t) * h2
-                Monodromy = (np.linalg.inv(I-B)).dot((I+A).dot(Monodromy))
-                A = B
-            multipliers = np.linalg.eig(Monodromy)[0]
-            rho_max = max(list(map(abs, multipliers)))
-            if rho_max > 1 + Eps_multipliers:
-                StMatr[i, j] = 1
+            for m in range(mu.shape[0]):
+                A_matr, T = Koshi(A_, B_, D_, coefs, mu[m], xi1_args[i], xi2_args[j])
+                h2 = T / N / 2
+                A = A_matr(0.0) * h2
+                Monodromy = I
+                t = 0
+                for k in range(N + 1):
+                    t += h2
+                    B = A_matr(t) * h2
+                    Monodromy = (np.linalg.inv(I-B)).dot((I+A).dot(Monodromy))
+                    A = B
+                multipliers = np.linalg.eig(Monodromy)[0]
+                rho_max = max(list(map(abs, multipliers)))
+                if rho_max > 1 + Eps_multipliers:
+                    StMatr[i, j] = 1
     return StMatr

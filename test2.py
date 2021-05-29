@@ -11,8 +11,8 @@ B = np.load(r"/home/hello/PycharmProjects/NIR_/B_Matrix.npy", allow_pickle=True)
 D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 
 
-mx, Mx, nPtx = 0, 1.0, 16
-my, My, nPty = 0, 0.5, 16
+mx, Mx, nPtx = 0, 1.0, 32
+my, My, nPty = 0, 0.5, 32
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     print("начали")
     xi1_args, xi2_args = np.linspace(mx + step_x, Mx - step_x, nPtx), np.linspace(my + step_y, My - step_y, nPty)
     start_time = time.time()
-    M = define_stability_async(A, B, D, np.array([0.2, 0.3]), 0.2, n_jobs=8)
+    M = define_stability_async(A, B, D, np.array([0.2, 0.3]), np.array([1.0]), n_jobs=8)
     print("--- %s seconds ---" % (time.time() - start_time))
     plot_dots(M)
     a = input()
