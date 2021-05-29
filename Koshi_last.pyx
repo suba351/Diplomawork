@@ -2,8 +2,9 @@ import cython
 cimport cython
 import numpy as np
 cimport numpy as np
+from libc.math cimport pi, cos, sin
 from sympy import symbols, Matrix
-from sympy import Symbol, re, sqrt, pi, cos, sin
+from sympy import Symbol, re, sqrt
 from sympy.solvers import solve
 from sympy.utilities.autowrap import autowrap
 import os
