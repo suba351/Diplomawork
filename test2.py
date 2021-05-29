@@ -12,8 +12,8 @@ D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 # coeffs = [[119.70647156248701, 0.0010825618631403865, 0.0], [287.50279265854937, 0.02814203176239039, 0.0], [3128.8357316400056, 0.9999999994866093, 0.0]]
 # coeffs = np.array(coeffs)
 
-mx, Mx, nPtx = 0, 1.0, 32
-my, My, nPty = 0, 0.5, 32
+mx, Mx, nPtx = 0, 1.0, 16
+my, My, nPty = 0, 0.5, 16
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 

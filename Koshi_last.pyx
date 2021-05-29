@@ -41,18 +41,16 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
         coefs[3*i + 2] = float(V[0]*D_alfa[0])
 
     z_ch_n = float((np.linalg.inv(C1).dot(F1))[0][0])
-    print(coefs)
-    print(xi_1, xi_2)
     T = 2*3.141592 / coefs[0]
 
-    value = 0
-    for i in range(3):
-            value += coefs[3 * i + 1] * cos(coefs[3 * i] * t) + coefs[3 * i + 2] * sin(coefs[3 * i] * t)
-    etta_ = value + z_ch_n
-
-    etta_c = autowrap(etta_, backend='cython', tempdir='./autowraptmp_etta')
-
-    return etta_c, T
+    def etta_(double t):
+        cdef Py_ssize_t i
+        cdef double value
+        value = 0
+        for i in range(3):
+                value += coefs[3 * i + 1] * cos(coefs[3 * i] * t) + coefs[3 * i + 2] * sin(coefs[3 * i] * t)
+        return value  + z_ch_n
+    return etta_, T
 
 
 
@@ -62,8 +60,6 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
 def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, double mu, double xi_1, double xi_2):
     cdef double T
     etta_cur, T = etta(xi_1, xi_2)
-    print(type(etta_cur))
-
     cdef double mu_
     cdef double kappa0
     cdef double f0
@@ -76,16 +72,15 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
     A = A_
     B = B_
     D = D_
+    def Matrix_curr(double t):
+        return np.array([
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
+                [-(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[0][0] / A[0][0], 0, 0, -2 * mu * B[0][1] / A[0][0]],
+                [0, -(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[1][1] / A[1][1], -2 * mu * B[1][0] / A[1][1], 0]
+            ], dtype=float)
 
-    matrix_c = Matrix([
-            [0, 0, 1, 0],
-            [0, 0, 0, 1],
-            [-(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[0][0] / A[0][0], 0, 0, -2 * mu * B[0][1] / A[0][0]],
-            [0, -(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[1][1] / A[1][1], -2 * mu * B[1][0] / A[1][1], 0]
-        ])
-    Matrix_c = autowrap(matrix_c, backend='cython', tempdir='./autowraptmp_etta')
-
-    return Matrix_c, T
+    return Matrix_curr, T
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
