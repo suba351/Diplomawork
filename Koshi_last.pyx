@@ -73,7 +73,7 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
     B = B_
     D = D_
     def Matrix_curr(double t):
-        return np.ndarray([
+        return np.array([
                 [0, 0, 1, 0],
                 [0, 0, 0, 1],
                 [-(mu ** 2 - f0 - kappa0 * etta_cur(t)) * D[0][0] / A[0][0], 0, 0, -2 * mu * B[0][1] / A[0][0]],
@@ -85,7 +85,7 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, double[:] mu, double[:] xi1_args, double[:] xi2_args):
+def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, double[:] xi1_args, double[:] xi2_args, double[:] mu):
     cdef Py_ssize_t i, j, m
     cdef long val
     cdef np.ndarray[np.float64_t, ndim=2] I, Monodromy, StMatr, A, B
@@ -94,7 +94,7 @@ def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, d
     Eps_multipliers = 0.0001
     N = 1000
     I = np.eye(4, 4)
-    StMatr = np.zeros((xi1_args.shape[0], xi2_args.shape[0]))
+    StMatr = np.zeros((xi2_args.shape[0], mu.shape[0]))
     for i in range(xi1_args.shape[0]):
         for j in range(xi2_args.shape[0]):
             for m in range(mu.shape[0]):
@@ -111,5 +111,5 @@ def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, d
                 multipliers = np.linalg.eig(Monodromy)[0]
                 rho_max = max(list(map(abs, multipliers)))
                 if rho_max > 1 + Eps_multipliers:
-                    StMatr[i, j] = 1
+                    StMatr[j, m] = 1
     return StMatr
