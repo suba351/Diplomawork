@@ -32,8 +32,8 @@ def plot_dots(Matrix):
     for x in range(nPty):
         for y in range(11):
             if Matrix[x, y] == 1:
-                print('yeah', x, y)
                 plt.plot(x_space[x], y_space[y], 'o-r')
+    plt.savefig(r'/home/hello/PycharmProjects/NIR_/figures_mu/' + str(1) + '. xi1 = ' + str('{:.3f}'.format(0.2)) + '.jpg')
     plt.show()
 
 a = np.array([[0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 1.],

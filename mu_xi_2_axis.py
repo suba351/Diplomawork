@@ -10,29 +10,34 @@ A = np.load(r"/home/hello/PycharmProjects/NIR_/A_Matrix.npy", allow_pickle=True)
 B = np.load(r"/home/hello/PycharmProjects/NIR_/B_Matrix.npy", allow_pickle=True)
 D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 
-mu_args = np.linspace(0.0, 1.0, 11)
 mx, Mx, nPtx = 0, 1.0, 32
 my, My, nPty = 0, 0.5, 32
+m_mu, M_mu, nPt_mu = 0.0, 1.0, 11
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
+step_mu = (M_mu - m_mu) / nPt_mu / 2
+xi_1 = 0.2
 
 xi1_args, xi2_args = np.linspace(mx + step_x, Mx - step_x, nPtx), np.linspace(my + step_y, My - step_y, nPty)
-
+mu_args = np.linspace(0.0, 1.0, 11)
 plt.show()
+
+
 def plot_dots(Matrix):
     x_space = np.linspace(mx, Mx, nPtx)
     y_space = mu_args
     plt.figure('graph')
     plt.xlim(mx-step_x, Mx+step_x)
-    plt.ylim(my-step_y, My+step_y)
+    plt.ylim(m_mu-step_mu, M_mu+step_mu)
     plt.grid(True)
     plt.xlabel('xi_2', fontsize=12)
     plt.ylabel('mu', fontsize=12)
     plt.title('graph', fontsize=12)
     for x in range(nPty):
-        for y in range(11):
+        for y in range(nPt_mu):
             if Matrix[x, y] == 1:
                 plt.plot(x_space[x], y_space[y], 'o-r')
+    plt.savefig(r'/home/hello/PycharmProjects/NIR_/figures_mu/' + 'xi1 = ' + str('{:.3f}'.format(xi_1)) + '.jpg')
     plt.show()
 
 
@@ -55,7 +60,7 @@ if __name__ == '__main__':
     print("начали")
     xi1_args, xi2_args = np.linspace(mx + step_x, Mx - step_x, nPtx), np.linspace(my + step_y, My - step_y, nPty)
     start_time = time.time()
-    M = define_stability_async(A, B, D, np.array([0.2, 0.3]), np.array((0.2,)), n_jobs=8)
+    M = define_stability_async(A, B, D, np.array([0.2, 0.3]), np.array((xi_1,)), n_jobs=8)
     print("--- %s seconds ---" % (time.time() - start_time))
     plot_dots(M)
     a = input()
