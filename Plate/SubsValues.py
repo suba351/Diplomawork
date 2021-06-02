@@ -4,7 +4,7 @@ from sympy import symbols, Matrix, sqrt
 
 
 def subs_values():
-    a, b, E, mu, D, k, k_rez, rho, h, p0, b_a, h_r, k0 = symbols('a b E mu D k k_rez rho h p0_2 b_a h0 k0', real=True)
+    a, b, E, mu, D, k, k_rez, rho, h, p0, b_a, h_r, k0, N0, m0 = symbols('a b E mu D k k_rez rho h p0_2 b_a h0 k0 N0 m0', real=True)
     M_rol, A_len, l_len, E_len, h_r = symbols('M_rol A_len l_len E_len h_r', real=True)
     kappa1, kappa2, kappa3, kappa4 = symbols('kappa1 kappa2 kappa3 kappa4', real=True)
     """
@@ -48,4 +48,6 @@ def subs_values():
     M = M.subs(mu, values[mu])
     C = C.subs(mu, values[mu])
     F = F.subs(k0, values[k0])
-    return M, C, F, float(values[b] / values[a])
+    coeffs = np.array([values[N0]/(values[m0] * values[p0]**2 * values[a]**2), values[A_len] * values[E_len]/(values[m0] * values[p0]**2 * values[a]**2)])
+    print(coeffs)
+    return M, C, F, float(values[b] / values[a]), coeffs

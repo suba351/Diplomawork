@@ -13,7 +13,7 @@ from Plate.SubsValues import subs_values
 t = Symbol('t')
 p = Symbol('p')
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
-M, C, F, b_a = subs_values()
+M, C, F, b_a, f0_kappa0 = subs_values()
 C_c = autowrap(C, args=(xi1__, xi2__), backend='cython', tempdir='./autowraptmp_C')
 F_c = autowrap(F, args=(xi1__, xi2__), backend='cython', tempdir='./autowraptmp_F')
 
@@ -40,7 +40,7 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
         coefs[3*i + 1] = float(V[0]*C_alfa[0])
         coefs[3*i + 2] = float(V[0]*D_alfa[0])
 
-    z_ch_n = float((np.linalg.inv(C1).dot(F1))[0][0])
+    z_ch_n = float((np.linalg.inv(M1).dot(F1))[0][0])
     T = 2*3.141592 / coefs[0]
 
     def etta_(double t):
@@ -57,14 +57,14 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, double mu, double xi_1, double xi_2):
+def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double mu, double xi_1, double xi_2):
     cdef double T
     etta_cur, T = etta(xi_1, xi_2)
     cdef double mu_
     cdef double kappa0
     cdef double f0
-    kappa0 = free[0]
-    f0 = free[1]
+    kappa0 = f0_kappa0[0]
+    f0 = f0_kappa0[1]
     mu_ = mu
     cdef double[:, :] A
     cdef double[:, :] B
@@ -85,7 +85,7 @@ def Koshi(double[:, :] A_, double[:, :] B_, double[:, :] D_, double [:] free, do
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, double[:] xi1_args, double[:] xi2_args, double[:] mu):
+def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, double[:] xi1_args, double[:] xi2_args, double[:] mu):
     cdef Py_ssize_t i, j, m
     cdef long val
     cdef np.ndarray[np.float64_t, ndim=2] I, Monodromy, StMatr, A, B
@@ -98,7 +98,7 @@ def define_stability(double[:, :] A_, double[:, :] B_, double[:, :] D_, coefs, d
     for i in range(xi1_args.shape[0]):
         for j in range(xi2_args.shape[0]):
             for m in range(mu.shape[0]):
-                A_matr, T = Koshi(A_, B_, D_, coefs, mu[m], xi1_args[i], xi2_args[j])
+                A_matr, T = Koshi(A_, B_, D_, mu[m], xi1_args[i], xi2_args[j])
                 h2 = T / N / 2
                 A = A_matr(0.0) * h2
                 Monodromy = I
