@@ -13,10 +13,10 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     u12_spring = fi1.subs(xi1, 1) * psi1.subs(xi2, 0.5 * b_a) * fi2.subs(xi1, 1) * psi2.subs(xi2, 0.5 * b_a) * kappa3
 
     # Коэффициент при обобщённых координатах в выражении потенциальной энергии при деформации пластины:
-    A = a_coeff(fi1, psi1, fi2, psi2, b_a)
-    a_11 = A[0] + u11_spring
-    a_22 = A[1] + u22_spring
-    a_12 = A[2] + u12_spring
+    A, B, D = a_coeff(fi1, psi1, fi2, psi2, b_a)
+    a_11 = A + u11_spring
+    a_22 = B + u22_spring
+    a_12 = D + u12_spring
     a_21 = a_12
 
     # Создание матриц коэффициентов
