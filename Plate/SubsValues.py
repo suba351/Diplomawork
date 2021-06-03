@@ -13,6 +13,8 @@ def subs_values():
         E, mu, D - модуль Юнга, коэффициент Пуассона, цилиндрическая жесткость пластины
         k - жесткость пружин Ролика и Пластины (конусная бабка моделируется пружиной)
         k_rez - коэффициент резания = предел текучести материала пластины * ширину ленты
+        k_len - жесткость поджатия пружины
+        k_rez - жесткость "резания"
         rho - плотность материала пластины
         h - толщина пластины
 
@@ -21,6 +23,9 @@ def subs_values():
         l_len - длина ленты (расстояние от шарнира до ролика)
         E_len - модуль Юнга ленты
         h_r - толшина резания (толщина снимаемого слоя материала)
+        m0 - плотность ленты
+        N0 - сила преднатяга ленты
+        V - скорость ленты
 
     """
     # считываем характеристики материалов и прочее из файла data.txt
@@ -36,9 +41,9 @@ def subs_values():
     kappa[kappa4] = (values[k_rez] * values[a] ** 2) / (values[D])
 
     # загружаем матрицы масс и жесткости
-    M = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/M_Matrix.npy", allow_pickle=True))
-    C = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/C_Matrix.npy", allow_pickle=True))
-    F = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/F_vector.npy", allow_pickle=True))
+    M = Matrix(np.load(r"F:\NIR_4th_semestr\M_Matrix.npy", allow_pickle=True))
+    C = Matrix(np.load(r"F:\NIR_4th_semestr\C_Matrix.npy", allow_pickle=True))
+    F = Matrix(np.load(r"F:\NIR_4th_semestr\F_vector.npy", allow_pickle=True))
     # подставляем значения параметров в матрицы (кроме координат контакта)
     for x in kappa:
         M = M.subs(x, kappa[x])
@@ -49,5 +54,6 @@ def subs_values():
     C = C.subs(mu, values[mu])
     F = F.subs(k0, values[k0])
     coeffs = np.array([values[N0]/(values[m0] * values[p0]**2 * values[a]**2), values[A_len] * values[E_len]/(values[m0] * values[p0]**2 * values[a]**2)])
-    print(coeffs)
+    print(kappa)
+    print(values)
     return M, C, F, float(values[b] / values[a]), coeffs
