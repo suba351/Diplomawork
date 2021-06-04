@@ -7,7 +7,7 @@ import time
 
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
 M, C, F, b_a, f0_kappa0 = subs_values()
-xi1, xi2 = 0.5, 0.25
+xi1, xi2 = 0.6, 0.3
 M = M.subs([(xi1__, xi1), (xi2__, xi2)])
 C = C.subs([(xi1__, xi1), (xi2__, xi2)])
 F = F.subs([(xi1__, xi1), (xi2__, xi2)])
@@ -30,9 +30,9 @@ def system1(y, t):
     return dydt
 
 
-etta_0, f1_0, f2_0 = -0.01, 0, 0.01
+etta_0, f1_0, f2_0 = 0.0, 0.1, 0
 y0 = [etta_0, 0.0, f1_0, 0.0, f2_0, 0.0]
-t = np.linspace(0, 0.05, 10001)
+t = np.linspace(0, 0.3, 10001)
 
 
 result = odeint(system, y0, t)

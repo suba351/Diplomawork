@@ -42,7 +42,7 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     c22 = a_22 + 2 * kappa4 * u2 ** 2
 
     C = np.array([
-        [kappa1 + kappa2, -kappa2 * u1, -kappa2 * u2],
+        [kappa1 - kappa2, -kappa2 * u1, -kappa2 * u2],
         [-kappa4 * u1, c11, c12],
         [-kappa4 * u2, c21, c22]
     ])
