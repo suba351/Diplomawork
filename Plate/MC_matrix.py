@@ -36,6 +36,7 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     u1 = fi1.subs(xi1, xi1__)*psi1.subs(xi2, xi2__)
     u2 = fi2.subs(xi1, xi1__)*psi2.subs(xi2, xi2__)
 
+
     c11 = a_11 + 2 * kappa4 * u1 ** 2
     c12 = a_12 + 2 * kappa4 * u1 * u2
     c21 = a_21 + 2 * kappa4 * u1 * u2
@@ -47,7 +48,7 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
         [-kappa4 * u2, c21, c22]
     ])
 
-    F = np.array([-kappa2 * k0, kappa4*u1*k0, kappa4*u2*k0])
+    F = np.array([-kappa2 + kappa2, kappa4*u1*k0, kappa4*u2*k0])
 
     np.save('M_Matrix', M)
     np.save('C_Matrix', C)
