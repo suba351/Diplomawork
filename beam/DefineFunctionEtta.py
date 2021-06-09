@@ -1,5 +1,4 @@
-from sympy import symbols, Matrix
-from sympy import Symbol, re, sqrt
+from sympy import symbols, Matrix, Symbol, re, sqrt
 from sympy.solvers import solve
 import numpy as np
 import os

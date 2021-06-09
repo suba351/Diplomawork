@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sympy import symbols, Matrix
 from Plate.SubsValues import subs_values, subs_values_no_force
 import numpy as np
+from matplotlib import animation
 import time
 
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
@@ -36,11 +37,12 @@ u2 = u2[0].subs([(xi1__, xi1), (xi2__, xi2)])
 
 print()
 print(u1, u2)
+print(f0_kappa0_k0)
 
 
 def system(y, t):
     etta, d_etta, f1, d_f1, f2, d_f2 = y
-    if etta - u1*f1 - u2*f2 - f0_kappa0_k0[2] > 0:
+    if etta - u1*f1 - u2*f2 + f0_kappa0_k0[2] > 0:
         return [d_etta, vect_plus[0][0] - (matr_plus[0][0] * etta + matr_plus[0][1] * f1 + matr_plus[0][2] * f2),
                 d_f1, vect_plus[1][0] - (matr_plus[1][0] * etta + matr_plus[1][1] * f1 + matr_plus[1][2] * f2),
                 d_f2, vect_plus[2][0] - (matr_plus[2][0] * etta + matr_plus[2][1] * f1 + matr_plus[2][2] * f2)]
@@ -50,16 +52,10 @@ def system(y, t):
                 d_f2, vect_minus[2][0] - (matr_minus[2][0] * etta + matr_minus[2][1] * f1 + matr_minus[2][2] * f2)]
 
 
-def system1(y, t):
-    omega, theta = y
-    dydt = [omega, -2*omega - 3*np.sin(theta)]
-    return dydt
-
-
-etta_0, f1_0, f2_0 = 0.1, 0., 0.
+etta_0, f1_0, f2_0 = -0.03, 0., 0.
 detta_0, df1_0, df2_0 = 0., 0., 0.
 y0 = [etta_0, detta_0, f1_0, df1_0, f2_0, df2_0]
-t = np.linspace(0, 10, 10001)
+t = np.linspace(0, 1, 10001)
 
 
 result = odeint(system, y0, t)
@@ -74,7 +70,7 @@ plt.legend(loc='best')
 plt.xlabel('t')
 
 plt.figure('force')
-plt.plot(t, f0_kappa0_k0[0] - f0_kappa0_k0[1] * result[:, 0], 'b', label='T')
+plt.plot(t, f0_kappa0_k0[1] * result[:, 0], 'b', label='T')
 plt.grid()
 plt.title('Force')
 plt.legend(loc='best')
