@@ -1,10 +1,9 @@
 from scipy.integrate import odeint
-import matplotlib.pyplot as plt
 from sympy import symbols, Matrix
 from Plate.SubsValues import subs_values, subs_values_no_force
 import numpy as np
-from matplotlib import animation
-import time
+import matplotlib.pyplot as plt
+from amplitude_force.Graph_Animation import plot_ode, animations
 
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
 M, C, F, b_a, f0_kappa0_k0 = subs_values()
@@ -52,29 +51,15 @@ def system(y, t):
                 d_f2, vect_minus[2][0] - (matr_minus[2][0] * etta + matr_minus[2][1] * f1 + matr_minus[2][2] * f2)]
 
 
-etta_0, f1_0, f2_0 = -0.03, 0., 0.
+etta_0, f1_0, f2_0 = -0.02, 0., 0.
 detta_0, df1_0, df2_0 = 0., 0., 0.
 y0 = [etta_0, detta_0, f1_0, df1_0, f2_0, df2_0]
-t = np.linspace(0, 1, 10001)
-
+t = np.linspace(0, 5, 10001)
 
 result = odeint(system, y0, t)
 
-plt.figure('displacement')
-plt.plot(t, result[:, 0], 'b', label='etta(t)')
-plt.plot(t, result[:, 2], 'g', label='f1(t)')
-plt.plot(t, result[:, 4], 'r', label='f2(t)')
-plt.grid()
-plt.title('etta_0 = ' + str(etta_0) + '; ' + 'f1_0 = ' + str(f1_0) + '; ' + 'f2_0 = ' + str(f2_0))
-plt.legend(loc='best')
-plt.xlabel('t')
+result[:, 2] = result[:, 2] * u1
+result[:, 4] = result[:, 4] * u2
 
-plt.figure('force')
-plt.plot(t, f0_kappa0_k0[1] * result[:, 0], 'b', label='T')
-plt.grid()
-plt.title('Force')
-plt.legend(loc='best')
-plt.xlabel('t')
-
-plt.show()
-
+plot_ode(t, result, [etta_0, f1_0, f2_0], [1, 0.002])
+ani = animations(t, result, [etta_0, f1_0, f2_0], [1, 0.002])
