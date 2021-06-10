@@ -13,10 +13,10 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     u12_spring = fi1.subs(xi1, 1) * psi1.subs(xi2, 0.5 * b_a) * fi2.subs(xi1, 1) * psi2.subs(xi2, 0.5 * b_a) * kappa3
 
     # Коэффициент при обобщённых координатах в выражении потенциальной энергии при деформации пластины:
-    A = a_coeff(fi1, psi1, fi2, psi2, b_a)
-    a_11 = A[0] + u11_spring
-    a_22 = A[1] + u22_spring
-    a_12 = A[2] + u12_spring
+    A, B, D = a_coeff(fi1, psi1, fi2, psi2, b_a)
+    a_11 = A + u11_spring
+    a_22 = B + u22_spring
+    a_12 = D + u12_spring
     a_21 = a_12
 
     # Создание матриц коэффициентов
@@ -36,18 +36,19 @@ def MC_matrix(b_a, fi1, psi1, fi2, psi2):
     u1 = fi1.subs(xi1, xi1__)*psi1.subs(xi2, xi2__)
     u2 = fi2.subs(xi1, xi1__)*psi2.subs(xi2, xi2__)
 
+
     c11 = a_11 + 2 * kappa4 * u1 ** 2
     c12 = a_12 + 2 * kappa4 * u1 * u2
     c21 = a_21 + 2 * kappa4 * u1 * u2
     c22 = a_22 + 2 * kappa4 * u2 ** 2
 
     C = np.array([
-        [kappa1 + kappa2, -kappa2 * u1, -kappa2 * u2],
+        [kappa1 - kappa2, -kappa2 * u1, -kappa2 * u2],
         [-kappa4 * u1, c11, c12],
         [-kappa4 * u2, c21, c22]
     ])
 
-    F = np.array([-kappa2 * k0, kappa4*u1*k0, kappa4*u2*k0])
+    F = np.array([-kappa2 + kappa2, kappa4*u1*k0, kappa4*u2*k0])
 
     np.save('M_Matrix', M)
     np.save('C_Matrix', C)

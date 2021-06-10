@@ -9,7 +9,7 @@ from Plate.SubsValues import subs_values
 p = Symbol("p")
 xi1__, xi2__ = symbols('xi1__ xi2__', real=True)
 
-M, C, b_a = subs_values()
+M, C, F, b_a, f0_kappa0 = subs_values()
 
 
 def print_freq(i, xi, mesh, p1, p2, p3):
@@ -43,7 +43,7 @@ def plot_grapghs(n_px=11, n_py=81):
     # разбиваем пластину сеткой (точки контакта)
     mesh1 = np.linspace(0.0, 1.0, n_px)
     mesh2 = np.linspace(0., b_a, n_py)
-    os.chdir(r"/figures")
+    os.chdir(r"F:\NIR_4th_semestr\figures")
     i = 0
 
     for xi1 in mesh1:

@@ -2,6 +2,7 @@ from sympy import symbols, diff, simplify, nsolve, sin, sinh
 from Plate.ReadData import read_data
 from Plate.MC_matrix import MC_matrix
 from Plate.PlotGraphs import plot_forms
+import numpy as np
 
 # Вспомогательные переменные
 x, t, xi1, xi2, xi1__, xi2__ = symbols('x t xi1 xi2 xi1__ xi2__', real=True)
@@ -39,6 +40,12 @@ fi1 = fi.subs(alpha_, alfa1)
 fi2 = fi.subs(alpha_, alfa2)
 psi1 = psi.subs(lambda_, lambda1)
 psi2 = psi.subs(lambda_, lambda2)
+
+u1 = np.array([fi1.subs(xi1, xi1__) * psi1.subs(xi2, xi2__)])
+u2 = np.array([fi2.subs(xi1, xi1__) * psi2.subs(xi2, xi2__)])
+
+np.save('U1', u1)
+np.save('U2', u2)
 
 # построение детерминантов и форм
 plot_forms(b_a, Eq1, Eq2, fi1, fi2, psi1, psi2)
