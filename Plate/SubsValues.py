@@ -40,9 +40,9 @@ def subs_values():
     kappa[kappa4] = (values[k_rez] * values[a] ** 2) / (values[D])
 
     # загружаем матрицы масс и жесткости
-    M = Matrix(np.load(r"F:\NIR_4th_semestr\M_Matrix.npy", allow_pickle=True))
-    C = Matrix(np.load(r"F:\NIR_4th_semestr\C_Matrix.npy", allow_pickle=True))
-    F = Matrix(np.load(r"F:\NIR_4th_semestr\F_vector.npy", allow_pickle=True))
+    M = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/M_Matrix.npy", allow_pickle=True))
+    C = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/C_Matrix.npy", allow_pickle=True))
+    F = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/F_vector.npy", allow_pickle=True))
     # подставляем значения параметров в матрицы (кроме координат контакта)
     for x in kappa:
         M = M.subs(x, kappa[x])
@@ -95,9 +95,9 @@ def subs_values_no_force():
     kappa[kappa4] = 0
 
     # загружаем матрицы масс и жесткости
-    M = Matrix(np.load(r"F:\NIR_4th_semestr\M_Matrix.npy", allow_pickle=True))
-    C = Matrix(np.load(r"F:\NIR_4th_semestr\C_Matrix.npy", allow_pickle=True))
-    F = Matrix(np.load(r"F:\NIR_4th_semestr\F_vector.npy", allow_pickle=True))
+    M = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/M_Matrix.npy", allow_pickle=True))
+    C = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/C_Matrix.npy", allow_pickle=True))
+    F = Matrix(np.load(r"/home/hello/PycharmProjects/NIR_/F_vector.npy", allow_pickle=True))
     # подставляем значения параметров в матрицы (кроме координат контакта)
     for x in kappa:
         M = M.subs(x, kappa[x])
