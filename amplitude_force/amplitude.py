@@ -28,8 +28,8 @@ vect_minus = np.array(M_nf.inv() * F_nf)
 matr_plus = np.array(M.inv() * C)
 matr_minus = np.array(M_nf.inv() * C_nf)
 
-u1 = np.load(r"F:\NIR_4th_semestr\U1.npy", allow_pickle=True)
-u2 = np.load(r"F:\NIR_4th_semestr\U2.npy", allow_pickle=True)
+u1 = np.load(r"/home/hello/PycharmProjects/NIR_/U1.npy", allow_pickle=True)
+u2 = np.load(r"/home/hello/PycharmProjects/NIR_/U2.npy", allow_pickle=True)
 
 u1 = u1[0].subs([(xi1__, xi1), (xi2__, xi2)])
 u2 = u2[0].subs([(xi1__, xi1), (xi2__, xi2)])

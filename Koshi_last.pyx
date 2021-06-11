@@ -24,7 +24,7 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
     cdef float T, z_ch_n
     cdef Py_ssize_t i
     cdef double[9] coefs
-    C1, M1, F1 = C_c(xi_1, xi_2), M, F_c(xi_1, xi_2)
+    C1, M1, F1 = Matrix(C_c(xi_1, xi_2)), Matrix(M), Matrix(F_c(xi_1, xi_2))
     P = [sqrt(re(x)) for x in solve((C1 - p * M1).det(), p)]
     for i in range(3):
         p_i = P[i]
@@ -40,7 +40,6 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
         coefs[3*i + 1] = float(V[0]*C_alfa[0])
         coefs[3*i + 2] = float(V[0]*D_alfa[0])
 
-    z_ch_n = float((np.linalg.inv(M1).dot(F1))[0][0])
     T = 2*3.141592 / coefs[0]
 
     def etta_(double t):

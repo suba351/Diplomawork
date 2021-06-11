@@ -13,7 +13,8 @@ D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 
 mx, Mx, nPtx = 0, 1.0, 32
 my, My, nPty = 0, 0.5, 32
-m_mu, M_mu, nPt_mu = 0.0, 0.05, 21
+m_mu, M_mu, nPt_mu = 0.0, 0.15, 21
+
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 step_mu = (M_mu - m_mu) / nPt_mu / 2

@@ -39,11 +39,11 @@ def print_freq(i, xi, mesh, p1, p2, p3):
     plt.close()
 
 
-def plot_grapghs(n_px=11, n_py=81):
+def plot_grapghs(n_px=21, n_py=201):
     # разбиваем пластину сеткой (точки контакта)
     mesh1 = np.linspace(0.0, 1.0, n_px)
     mesh2 = np.linspace(0., b_a, n_py)
-    os.chdir(r"F:\NIR_4th_semestr\figures")
+    os.chdir(r"/home/hello/PycharmProjects/NIR_/figures")
     i = 0
 
     for xi1 in mesh1:
