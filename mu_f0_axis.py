@@ -1,5 +1,5 @@
 import sys
-import Koshi_mu_xi2
+import Koshi_mu_f0
 print(sys.path)
 import matplotlib.pyplot as plt
 from functools import partial
@@ -14,40 +14,44 @@ D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 mx, Mx, nPtx = 0, 1.0, 32
 my, My, nPty = 0, 0.5, 32
 m_mu, M_mu, nPt_mu = 0.0, 0.15, 21
+m_f0, M_f0, nPt_f0 = 0.0, 1.0, 21
 
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
 step_mu = (M_mu - m_mu) / nPt_mu / 2
+step_f0 = (M_f0 - m_f0) / nPt_f0 / 2
 xi_1 = 0.2
+xi_2 = 0.3
 
 xi1_args = np.linspace(mx + step_x, Mx - step_x, nPtx)
 xi2_args = np.linspace(my + step_y, My - step_y, nPty)
 mu_args = np.linspace(m_mu, M_mu, nPt_mu)
+f0_args = np.linspace(m_f0, M_f0, nPt_f0)
 
 plt.show()
 
 
 def plot_dots(Matrix):
-    x_space = np.linspace(mx, Mx, nPtx)
+    x_space = f0_args
     y_space = mu_args
     plt.figure('graph')
-    plt.xlim(mx-step_x, Mx+step_x)
+    plt.xlim(m_f0 - step_f0, M_f0 + step_f0)
     plt.ylim(m_mu-step_mu, M_mu+step_mu)
     plt.grid(True)
     plt.xlabel('xi_2', fontsize=12)
     plt.ylabel('mu', fontsize=12)
     plt.title('xi_1 =' + str(xi_1), fontsize=12)
-    for x in range(nPty):
+    for x in range(nPt_f0):
         for y in range(nPt_mu):
             if Matrix[x, y] == 1:
                 plt.plot(x_space[x], y_space[y], 'o-r')
-    plt.savefig(r'/home/hello/PycharmProjects/NIR_/figures_mu/' + 'xi1 = ' + str('{:.3f}'.format(xi_1)) + '.jpg')
+    plt.savefig(r'/home/hello/PycharmProjects/NIR_/figures_mu/' + 'xi1 = ' + str('{:.3f}'.format(xi_1)) + 'xi2 = ' + str('{:.3f}'.format(xi_2)) + '.jpg')
     plt.show()
 
 
 def define_stability_async(A, B, D, mu,  *, n_jobs):
     executor = ProcessPoolExecutor(max_workers=n_jobs)
-    spawn = partial(executor.submit, Koshi_mu_xi2.define_stability, A, B, D, mu)
+    spawn = partial(executor.submit, Koshi_mu_f0.define_stability, A, B, D, mu)
     step = (Mx - mx) / n_jobs
     fs = [spawn(np.linspace(mx + step_x + i*step, mx + step_x + (i+1)*step, nPtx // n_jobs),
                 mu_args)
