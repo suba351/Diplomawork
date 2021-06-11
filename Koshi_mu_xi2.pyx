@@ -20,8 +20,8 @@ F_c = autowrap(F, args=(xi1__, xi2__), backend='cython', tempdir='./autowraptmp_
 @cython.boundscheck(False)
 @cython.wraparound(False)
 @cython.overflowcheck(False)
-def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])):
-    cdef float T, z_ch_n
+def etta(double xi_1, double xi_2, z0=Matrix([0.1, 0, 0]), dz0=Matrix([0, 0, 0])):
+    cdef float T
     cdef Py_ssize_t i
     cdef double[9] coefs
     C1, M1, F1 = Matrix(C_c(xi_1, xi_2)), Matrix(M), Matrix(F_c(xi_1, xi_2))
@@ -48,7 +48,7 @@ def etta(double xi_1, double xi_2, z0=Matrix([0.2, 0, 0]), dz0=Matrix([0, 0, 0])
         value = 0
         for i in range(3):
                 value += coefs[3 * i + 1] * cos(coefs[3 * i] * t) + coefs[3 * i + 2] * sin(coefs[3 * i] * t)
-        return value  + z_ch_n
+        return value
     return etta_, T
 
 

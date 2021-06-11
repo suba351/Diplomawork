@@ -1,5 +1,5 @@
 import sys
-import Koshi_last
+import Koshi_mu_xi_2
 print(sys.path)
 import matplotlib.pyplot as plt
 from functools import partial
