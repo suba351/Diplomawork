@@ -13,8 +13,8 @@ D = np.load(r"/home/hello/PycharmProjects/NIR_/D_Matrix.npy", allow_pickle=True)
 
 mx, Mx, nPtx = 0, 1.0, 32
 my, My, nPty = 0, 0.5, 32
-m_mu, M_mu, nPt_mu = 0.0, 0.15, 21
-m_f0, M_f0, nPt_f0 = 0.0, 1.0, 21
+m_mu, M_mu, nPt_mu = 0.0, 1.0, 21
+m_f0, M_f0, nPt_f0 = 0.0, 1.0, 32
 
 step_x = (Mx - mx) / nPtx / 2
 step_y = (My - my) / nPty / 2
@@ -38,9 +38,9 @@ def plot_dots(Matrix):
     plt.xlim(m_f0 - step_f0, M_f0 + step_f0)
     plt.ylim(m_mu-step_mu, M_mu+step_mu)
     plt.grid(True)
-    plt.xlabel('xi_2', fontsize=12)
+    plt.xlabel('f0', fontsize=12)
     plt.ylabel('mu', fontsize=12)
-    plt.title('xi_1 =' + str(xi_1), fontsize=12)
+    plt.title('xi_1 =' + str(xi_1) + 'xi_2 =' + str(xi_2), fontsize=12)
     for x in range(nPt_f0):
         for y in range(nPt_mu):
             if Matrix[x, y] == 1:
@@ -49,11 +49,11 @@ def plot_dots(Matrix):
     plt.show()
 
 
-def define_stability_async(A, B, D, mu,  *, n_jobs):
+def define_stability_async(A, B, D, xi1, xi2, *, n_jobs):
     executor = ProcessPoolExecutor(max_workers=n_jobs)
-    spawn = partial(executor.submit, Koshi_mu_f0.define_stability, A, B, D, mu)
-    step = (Mx - mx) / n_jobs
-    fs = [spawn(np.linspace(mx + step_x + i*step, mx + step_x + (i+1)*step, nPtx // n_jobs),
+    spawn = partial(executor.submit, Koshi_mu_f0.define_stability, A, B, D, xi1, xi2)
+    step = (M_f0 - m_f0) / n_jobs
+    fs = [spawn(np.linspace(m_f0 + step_f0 + i*step, m_f0 + step_f0 + (i+1)*step, nPt_f0 // n_jobs),
                 mu_args)
           for i in range(n_jobs)]
     T = [f.result() for f in fs]
@@ -66,8 +66,7 @@ def define_stability_async(A, B, D, mu,  *, n_jobs):
 
 if __name__ == '__main__':
     print("начали")
-    xi1_args, xi2_args = np.linspace(mx + step_x, Mx - step_x, nPtx), np.linspace(my + step_y, My - step_y, nPty)
     start_time = time.time()
-    M = define_stability_async(A, B, D, np.array((xi_1,)), n_jobs=8)
+    M = define_stability_async(A, B, D, np.array((xi_1,)), np.array((xi_2,)), n_jobs=8)
     print("--- %s seconds ---" % (time.time() - start_time))
     plot_dots(M)

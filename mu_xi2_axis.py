@@ -45,9 +45,9 @@ def plot_dots(Matrix):
     plt.show()
 
 
-def define_stability_async(A, B, D, mu,  *, n_jobs):
+def define_stability_async(A, B, D, xi1,  *, n_jobs):
     executor = ProcessPoolExecutor(max_workers=n_jobs)
-    spawn = partial(executor.submit, Koshi_mu_xi2.define_stability, A, B, D, mu)
+    spawn = partial(executor.submit, Koshi_mu_xi2.define_stability, A, B, D, xi1)
     step = (Mx - mx) / n_jobs
     fs = [spawn(np.linspace(mx + step_x + i*step, mx + step_x + (i+1)*step, nPtx // n_jobs),
                 mu_args)
