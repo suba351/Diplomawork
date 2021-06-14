@@ -54,7 +54,7 @@ def system(y, t):
 etta_0, f1_0, f2_0 = -0.02, 0., 0.
 detta_0, df1_0, df2_0 = 0., 0., 0.
 y0 = [etta_0, detta_0, f1_0, df1_0, f2_0, df2_0]
-t = np.linspace(0, 5, 10001)
+t = np.linspace(0, 40, 10001)
 
 result = odeint(system, y0, t)
 

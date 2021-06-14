@@ -34,8 +34,8 @@ def animations(t, result, N_U, coeffs, l=0, r=3000, step=30):
     for i in range(2):
         axs[i].set_xlim((t[l], t[r]))
         axs[i].grid()
-    axs[0].set_ylim((N_U[0], -N_U[0]))
-    axs[1].set_ylim((-0.005, 0.01))
+    axs[0].set_ylim((-0.05, 0.05))
+    axs[1].set_ylim((-0.005, 0.02))
     force_values = [0 if etta - f1 - f2 + k0 < 0 else kappa0 * (etta - f1 - f2 + k0) for
                     etta, f1, f2 in zip(list(result[:, 0]), list(result[:, 2]), list(result[:, 4]))]
 
@@ -59,7 +59,7 @@ def animations(t, result, N_U, coeffs, l=0, r=3000, step=30):
         return patches
 
     anim = animation.FuncAnimation(fig, animate, init_func=init,
-                                   frames=300, interval=10, blit=True)
+                                   frames=300, interval=30, blit=True)
     anim.save('animation.gif', writer='PillowWriter', fps=30)
 
     plt.show()
