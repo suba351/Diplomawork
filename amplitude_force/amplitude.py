@@ -51,10 +51,10 @@ def system(y, t):
                 d_f2, vect_minus[2][0] - (matr_minus[2][0] * etta + matr_minus[2][1] * f1 + matr_minus[2][2] * f2)]
 
 
-etta_0, f1_0, f2_0 = -0.02, 0., 0.
+etta_0, f1_0, f2_0 = -0.00, 0., 0.
 detta_0, df1_0, df2_0 = 0., 0., 0.
 y0 = [etta_0, detta_0, f1_0, df1_0, f2_0, df2_0]
-t = np.linspace(0, 40, 10001)
+t = np.linspace(0, 5, 10001)
 
 result = odeint(system, y0, t)
 

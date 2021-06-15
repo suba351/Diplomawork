@@ -1,6 +1,11 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import animation
+from Plate.ReadData import read_data
+from sympy import symbols, Matrix, sqrt
+values = read_data()
+k_rez = symbols('k_rez', real=True)
+koef = float(values[k_rez])
 
 
 def plot_ode(t, result, N_U, coeffs):
@@ -15,7 +20,7 @@ def plot_ode(t, result, N_U, coeffs):
     plt.legend(loc='best')
     plt.xlabel('t')
 
-    force_values = [0 if etta - f1 - f2 + k0 < 0 else kappa0 * (etta - f1 - f2 + k0) for
+    force_values = [0 if etta - f1 - f2 + k0 < 0 else koef * (etta - f1 - f2 + k0) for
                     etta, f1, f2 in zip(list(result[:, 0]), list(result[:, 2]), list(result[:, 4]))]
 
     plt.figure('force')
@@ -27,22 +32,23 @@ def plot_ode(t, result, N_U, coeffs):
     print("построил график")
 
 
-def animations(t, result, N_U, coeffs, l=0, r=3000, step=30):
+def animations(t, result, N_U, coeffs, l=0, r=500, step=5):
     kappa0, k0 = coeffs
     fig, axs = plt.subplots(2)
 
     for i in range(2):
         axs[i].set_xlim((t[l], t[r]))
         axs[i].grid()
-    axs[0].set_ylim((-0.05, 0.05))
-    axs[1].set_ylim((-0.005, 0.02))
-    force_values = [0 if etta - f1 - f2 + k0 < 0 else kappa0 * (etta - f1 - f2 + k0) for
+    axs[0].set_ylim((-0.0035, 0.0035))
+    # axs[1].set_ylim((-0.0005, 0.004))
+    force_values = [0 if etta - f1 - f2 + k0 < 0 else koef * (etta - f1 - f2 + k0) for
                     etta, f1, f2 in zip(list(result[:, 0]), list(result[:, 2]), list(result[:, 4]))]
 
     fig.suptitle('etta_0 = ' + str(N_U[0]) + '; ' + 'f1_0 = ' + str(N_U[1]) + '; ' + 'f2_0 = ' + str(N_U[2]))
     displacment = [axs[0].plot([], [], 'b', label='etta(t)')[0], axs[0].plot([], [], 'g', label='u1*f1(t)')[0], axs[0].plot([], [], 'r', label='u2*f2(t)')[0]]
     force = axs[1].plot([], [], 'b', label='force')[0]
     legend = axs[0].legend(loc='upper left')
+    legend = axs[1].legend(loc='upper left')
     patches = displacment + [force]
 
     def init():
@@ -59,7 +65,7 @@ def animations(t, result, N_U, coeffs, l=0, r=3000, step=30):
         return patches
 
     anim = animation.FuncAnimation(fig, animate, init_func=init,
-                                   frames=300, interval=30, blit=True)
+                                   frames=1800, interval=10, blit=True)
     anim.save('animation.gif', writer='PillowWriter', fps=30)
 
     plt.show()
